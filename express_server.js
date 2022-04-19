@@ -13,6 +13,11 @@ function generateRandomString() {
 };
 
 
+
+// Update your express server so that when it receives a POST request to /urls
+// it responds with a redirection to /urls/:shortURL,where shortURL is the random string we generated.
+
+
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -27,8 +32,12 @@ app.get("/urls", (req, res) => {
 
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  const shortURL = generateRandomString();
+  urlDatabase[shortURL] = req.body.longURL; // save the random string and the long URL to the database
+
+  // console.log(req.body);  // Log the POST request body to the console
+  // res.send("Ok");            // Respond with 'Ok' (we will replace this)
+  res.redirect(`/urls/${shortURL}`)
 });
 
 
@@ -38,6 +47,7 @@ app.post("/urls", (req, res) => {
 
 
 app.get("/urls/new", (req, res) => {
+
   res.render("urls_new");
 });
 
@@ -45,17 +55,32 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:shortURL", (req, res) => {
 
   const shortURL = req.params.shortURL;
+  const longURL = urlDatabase[shortURL];
 
   const templateVars = {
     shortURL: shortURL,
-    longURL: urlDatabase[shortURL]
+    longURL: longURL
   };
   // console.log(templateVars);
   res.render("urls_show", templateVars);
+  // res.redirect(`/urls/${  }`)
+  
 });
 
 
+// const urlDatabase = {
+//   "b2xVn2": "http://www.lighthouselabs.ca",
+//   "9sm5xK": "http://www.google.com"
+// };
 
+
+// redirect short URL to its long URL
+app.get("/u/:shortURL", (req, res) => {
+    const shortURL = req.params.shortURL;
+    const longURL = urlDatabase[shortURL];
+
+    res.redirect(longURL);
+});
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);

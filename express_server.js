@@ -9,6 +9,7 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+// console.log(urlDatabase);
 
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
@@ -18,6 +19,20 @@ app.get("/urls", (req, res) => {
 // app.get("/", (req, res) => {
 //   res.send("Hello!");
 // });
+
+app.get("/urls/:shortURL", (req, res) => {
+  
+  const shortURL = req.params.shortURL;
+
+  const templateVars = {
+    shortURL: shortURL,
+    longURL: urlDatabase[shortURL]
+  };
+  // console.log(templateVars);
+  res.render("urls_show", templateVars);
+});
+
+
 
 
 app.get("/urls.json", (req, res) => {

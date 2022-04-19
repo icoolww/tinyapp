@@ -14,8 +14,7 @@ function generateRandomString() {
 
 
 
-// Update your express server so that when it receives a POST request to /urls
-// it responds with a redirection to /urls/:shortURL,where shortURL is the random string we generated.
+
 
 
 const urlDatabase = {
@@ -40,10 +39,13 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${shortURL}`)
 });
 
+app.post("/urls/:shortURL/delete", (req, res) => {
 
-// app.get("/", (req, res) => {
-//   res.send("Hello!");
-// });
+  const shortURL = req.params.shortURL;
+  delete urlDatabase[shortURL];
+  res.redirect(`/urls/`);
+});
+
 
 
 app.get("/urls/new", (req, res) => {
@@ -68,10 +70,7 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 
-// const urlDatabase = {
-//   "b2xVn2": "http://www.lighthouselabs.ca",
-//   "9sm5xK": "http://www.google.com"
-// };
+
 
 
 // redirect short URL to its long URL

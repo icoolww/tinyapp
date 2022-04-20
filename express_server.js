@@ -22,6 +22,16 @@ app.post("/urls/:shortURL/edit", (req, res) => {
 
 
 
+app.post("/urls/:shortURL", (req, res) => {
+  const shortURL = req.params.shortURL;
+  urlDatabase[shortURL] = req.body.longURL;
+  console.log(req.body); 
+  console.log(urlDatabase);
+  res.redirect(`/urls/`)
+});
+
+
+
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"

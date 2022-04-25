@@ -69,7 +69,7 @@ app.post("/urls/:shortURL/edit", (req, res) => {
 app.post("/urls/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
   urlDatabase[shortURL].longURL = req.body.longURL;
-  res.redirect(`/urls/`)
+  res.redirect(`/urls`)
 });
 
 
@@ -120,7 +120,7 @@ app.post("/register", (req, res) => {
   users[newUserId] = newUser;
   
   req.session.user_id = newUserId;
-  res.redirect(`/urls/`)
+  res.redirect(`/urls`)
 });
 
 
@@ -139,7 +139,16 @@ app.post("/urls", (req, res) => {
 app.post("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
   delete urlDatabase[shortURL];
-  res.redirect(`/urls/`);
+  res.redirect(`/urls`);
+});
+
+app.get("/", (req, res) => {
+  if (!users[req.session.user_id]) {
+    return res
+      .status(403)
+      .redirect(`/login`);
+  } 
+  res.redirect(`/urls`);
 });
 
 
@@ -152,7 +161,6 @@ app.get("/register", (req, res) => {
   };
   res
     .render("urls_registration", templateVars)
-    .redirect(`/urls/`)
 });
 
 
@@ -164,7 +172,6 @@ app.get("/login", (req, res) => {
   };
   res
     .render("urls_login", templateVars)
-    .redirect(`/login/`)
 });
 
 // handling main display
@@ -179,7 +186,7 @@ app.get("/urls", (req, res) => {
   if (!users[req.session.user_id]) {
     return res
       .status(403)
-      .redirect(`/login/`)
+      .redirect(`/login`)
   } 
   res.render("urls_index", templateVars)
 });
@@ -194,7 +201,7 @@ app.get("/urls/new", (req, res) => {
   if (!users[req.session.user_id]) {
     return res
     .status(403)
-    .redirect(`/login/`);
+    .redirect(`/login`);
   } 
 
   res.render("urls_new", templateVars);

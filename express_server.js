@@ -1,13 +1,12 @@
 const express = require("express");
 const app = express();
-const PORT = 8080; // default port 8080
+const PORT = 8080; 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 const checkingUser = require('./helper.js');
 
 const bcrypt = require('bcryptjs');
 app.set("view engine", "ejs");
-// const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 
 // creating random string to be used for creating user id
@@ -41,6 +40,7 @@ app.use(cookieSession({
     const password = req.body.password;
     const userFound = checkingUser(email, users);
   
+  // throwing message if the email isn't match
   if (!userFound) {
     return res.status(403).send("email cannot be found");
   }
@@ -53,16 +53,15 @@ app.use(cookieSession({
 });
 
 
-// Add an endpoint to handle a POST to /logout, clears endpoint
+// add an endpoint to handle a POST to /logout, clears endpoint
 app.post("/logout", (req, res) => {
   req.session = null;
   res.redirect(`/login`)
 });
 
-
+// handling edit display layout
 app.post("/urls/:shortURL/edit", (req, res) => {
   const shortURL = req.params.shortURL;
-  
   res.redirect(`/urls/${shortURL}`)
 });
 
@@ -70,7 +69,6 @@ app.post("/urls/:shortURL/edit", (req, res) => {
 app.post("/urls/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
   urlDatabase[shortURL].longURL = req.body.longURL;
-
   res.redirect(`/urls/`)
 });
 
@@ -130,19 +128,16 @@ app.post("/register", (req, res) => {
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
   const longURL = req.body.longURL;
-  
   const userId = req.session.user_id
   urlDatabase[shortURL] = {};
   urlDatabase[shortURL].longURL = longURL
   urlDatabase[shortURL].userID = userId
-  
   res.redirect(`/urls/${shortURL}`)
 });
 
 // delete URL
 app.post("/urls/:shortURL/delete", (req, res) => {
   const shortURL = req.params.shortURL;
-
   delete urlDatabase[shortURL];
   res.redirect(`/urls/`);
 });
@@ -155,8 +150,9 @@ app.get("/register", (req, res) => {
     urls: urlDatabase,
     user: users[req.session.user_id],
   };
-  res.render("urls_registration", templateVars)
-  .redirect(`/urls/`)
+  res
+    .render("urls_registration", templateVars)
+    .redirect(`/urls/`)
 });
 
 
@@ -167,8 +163,8 @@ app.get("/login", (req, res) => {
     user: users[req.session.user_id],
   };
   res
-  .render("urls_login", templateVars)
-  .redirect(`/login/`)
+    .render("urls_login", templateVars)
+    .redirect(`/login/`)
 });
 
 // handling main display

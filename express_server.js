@@ -210,28 +210,6 @@ app.get("/urls/:shortURL", (req, res) => {
   const userId = req.body.user_id;
   const shortURL = req.params.shortURL;
   const longURL = urlDatabase[shortURL].longURL;
-  const email = req.body.email;
-  const loggedinEmail = users[req.session.user_id].email
-  const loggedinID = users[req.session.user_id].id
-  let message = "";
-
-  if (!loggedinEmail) {
-    message = "not logged in yet, please log in.";
-  } else if (!longURL) {
-    message = "short URL not exist, please add new URL";
-  } else if (loggedinID !== email) {
-    message = "sorry, no access";
-  }
-
-
-  console.log("users[userId]", users[userId])
-  console.log("req.session.userID", users[req.session.user_id])
-  console.log("userId", userId)
-  console.log("longURL.userID", longURL.userID)
-  console.log("shortURL", shortURL)
-  // console.log(a)
-  console.log("user email", email)
-  
 
   const templateVars = {
     shortURL: shortURL,

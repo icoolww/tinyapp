@@ -7,7 +7,7 @@
 </head>
 <%- include('partials/_header') %>
 <body>
-  <% if (user.id === url_userID) {%>
+  <% if (!errorMessage) {%>
   <div class="card text-center">
       <div class="card-header"></div>
       <div class="card-body">
@@ -28,7 +28,7 @@
       </div>
   </div>
   <% } else { %>
-    <p>You can't edit this url</p>
+    <p><%= errorMessage %></p>
   <% } %>
   <!-- Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
